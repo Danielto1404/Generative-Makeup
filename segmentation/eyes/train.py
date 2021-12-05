@@ -53,6 +53,7 @@ def run_from_args(
     dataset = CocoSegmentationDataset(
         annotation_path=annotation_path,
         images_root=images_root,
+        device=device,
         transform=transforms.Compose([
             transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
         ])

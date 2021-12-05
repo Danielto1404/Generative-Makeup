@@ -13,15 +13,18 @@ class CocoSegmentationDataset(torch.utils.data.Dataset):
     def __init__(self,
                  annotation_path: Union[str, Path],
                  images_root: [str, Path],
+                 device='cpu',
                  transform=None):
         """
         :param annotation_path: Path to the annotation json annotation file
         :param images_root:     Path to the images folder
+        :param device           Torch device
         :param transform:       Image torch transformation function
         """
         self.coco = coco.COCO(annotation_path)
         self.root = images_root
         self._ids = dict(enumerate(self.coco.imgs.keys()))
+        self.device = device
         self.transform = transform
 
     def _get_annotations(self, index):
@@ -62,7 +65,7 @@ class CocoSegmentationDataset(torch.utils.data.Dataset):
         w, h, file_name = image_json['width'], image_json['height'], image_json['file_name']
         mask = self._build_mask((w, h), annotations)
         image = self._read_image(image_json['file_name'])
-        return image, mask
+        return image.to(self.device), mask.to(self.device)
 
     def __len__(self):
         return len(self._ids)
