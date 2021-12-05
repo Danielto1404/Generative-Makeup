@@ -113,6 +113,15 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+# Images files
+*.png
+*.jpeg
+
+# Torch models
+*.pth
 
 # MacOS
 .DS_Store
+
+# ZIP files
+*.zip
