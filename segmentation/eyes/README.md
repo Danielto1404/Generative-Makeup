@@ -5,6 +5,7 @@
 **Структура датасета**
 
 Датасет должен быть представлен в формате COCO
+<br>
 [COCO Tutorial](https://www.immersivelimit.com/tutorials/create-coco-annotations-from-scratch) – здесь представлена
 структура ожидаемых данных и вкратце приведено описание каждого из полей.
 
