@@ -8,18 +8,20 @@ import torch.utils.data
 from PIL import Image
 from pycocotools import coco
 
+from utils import torch_normalize_image
+
 
 class CocoSegmentationDataset(torch.utils.data.Dataset):
     def __init__(self,
                  annotation_path: Union[str, Path],
                  images_root: [str, Path],
                  device='cpu',
-                 transform=None):
+                 transform=torch_normalize_image):
         """
         :param annotation_path: Path to the annotation json annotation file
         :param images_root:     Path to the images folder
         :param device           Torch device
-        :param transform:       Image torch transformation function
+        :param transform:       Image torch transformation function, default = image net `mean-std normalization`
         """
         self.coco = coco.COCO(annotation_path)
         self.root = images_root

@@ -1,27 +1,63 @@
-import numpy
+import argparse
+
 import torch
-from PIL import Image
-from torchvision.transforms import transforms
+from torch.utils.data import DataLoader
 
-tt = transforms.Compose([
-    transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-])
+from dataset import CocoSegmentationDataset
 
 
-def eval(image_path):
-    model = torch.load('checkpoints/model.pth').eval()
-    image = Image.open(image_path)
-    image = numpy.asarray(image).transpose((2, 0, 1))
-    image = torch.tensor(image).unsqueeze(0).float()
-    image = tt(image)
-    with torch.no_grad():
-        outputs = model(image)
-        tensors = outputs['out']
-        result_ = tensors[0].argmax(0)
+def eval(model, loader: DataLoader):
+    print('in eval')
+    # pass
+    # pass
+    # pass
+    # pass
+    # pass
+    # print("x")
 
-#     plt.imshow(result_)
-#     plt.imshow(image[0].transpose(0, 1).transpose(1, 2))
-#     plt.show()
-#
-#
-# eval('/Users/a19378208/Documents/GitHub/Generative-Makeup/data/images/0d384dbbcc121ca5049c423f81c26e6a.png')
+
+def eval_from_args(
+        annotation_path: str,
+        images_root: str,
+        load_path: str,
+        batch_size: int,
+        device: str
+):
+    dataset = CocoSegmentationDataset(
+        annotation_path=annotation_path,
+        images_root=images_root
+    )
+    loader = DataLoader(
+        dataset=dataset,
+        batch_size=batch_size,
+        shuffle=False
+    )
+    print(load_path)
+    # with open(load_path, 'r') as raw_model:
+    model = torch.load(load_path, map_location=device)
+    eval(model, loader)
+
+
+eval_from_args(
+    annotation_path='../../data/annotations-10.json',
+    images_root='../../data/images',
+    load_path='checkpoints/model.pth',
+    device='cpu',
+    batch_size=4,
+)
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--annotation_path', help='path to the json COCO validation annotations file')
+    parser.add_argument('--images_root', help='path to images folder')
+    parser.add_argument('--load_path', help='model checkpoint path')
+    parser.add_argument('--batch_size', help='batch size')
+    parser.add_argument('--device', help='torch device')
+    args = parser.parse_args()
+    eval_from_args(
+        annotation_path=args.annotation_path,
+        images_root=args.images_root,
+        load_path=args.load_path,
+        batch_size=args.batch_size,
+        device=args.device
+    )
