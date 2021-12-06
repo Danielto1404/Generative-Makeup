@@ -18,10 +18,6 @@ class SegmentationModel(nn.Module):
         # Cached in Users/a19378208/.cache/torch/hub/checkpoints/resnet50-0676ba61.pth
         self.model = constructor(num_classes=num_classes)
 
-    @property
-    def device(self):
-        return self.model.device
-
     def forward(self, image, mask=None) -> dict:
         outputs = self.model(image)
         if mask is not None:

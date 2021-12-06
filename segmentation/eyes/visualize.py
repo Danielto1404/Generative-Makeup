@@ -10,24 +10,21 @@ from PIL import Image
 
 def show_image_segmentation(model, image: torch.Tensor):
     np_img = image.numpy().transpose((1, 2, 0))
-    plt.figure()
 
     with torch.no_grad():
         mask = model(image.unsqueeze(0))['out'][0].argmax(0)
 
-    # subplot(r,c) provide the no. of rows and columns
+    plt.figure(figsize=(10, 20))
     f, axes = plt.subplots(2)
-
-    # use the created array to output your multiple images. In this case I have stacked 4 images vertically
     axes[0].imshow(np_img)
     axes[1].imshow(mask)
 
 
-def show_random_image(root: str, model):
+def show_random_image(root: str, model, device):
     file_path = np.random.choice(os.listdir(root))
     image = Image.open(os.path.join(root, file_path))
     image = numpy.asarray(image).transpose((2, 0, 1))
-    image = torch.tensor(image).float().to(model.device)
+    image = torch.tensor(image).float().to(device)
     show_image_segmentation(model, image)
 
 
@@ -38,5 +35,5 @@ if __name__ == '__main__':
     parser.add_argument('--device', help='torch device')
     args = parser.parse_args()
 
-    model = torch.load(args.load_path, map_location=args.device)
-    show_random_image(args.images_root, model)
+    segm_model = torch.load(args.load_path, map_location=args.device)
+    show_random_image(root=args.images_root, model=segm_model, device=args.device)
