@@ -7,11 +7,14 @@ import numpy as np
 import torch
 from PIL import Image
 
+from utils import torch_normalize_image
+
 
 def show_image_segmentation(model, image: torch.Tensor):
-    np_img = image.cpu().numpy().transpose((1, 2, 0))
+    np_img = image.cpu().numpy().transpose((1, 2, 0)) / 255
 
     with torch.no_grad():
+        image = torch_normalize_image(image)
         mask = model(image.unsqueeze(0))['out'][0].argmax(0).cpu().numpy()
 
     plt.figure(figsize=(10, 20))
