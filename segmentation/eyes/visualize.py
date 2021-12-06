@@ -35,5 +35,5 @@ if __name__ == '__main__':
     parser.add_argument('--device', help='torch device')
     args = parser.parse_args()
 
-    segm_model = torch.load(args.load_path, map_location=args.device)
+    segm_model = torch.load(args.load_path, map_location=args.device).eval()
     show_random_image(root=args.images_root, model=segm_model, device=args.device)
