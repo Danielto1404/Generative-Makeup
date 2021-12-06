@@ -39,4 +39,4 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     model = torch.load(args.load_path, map_location=args.device)
-    show_random_image(args.image_root, model)
+    show_random_image(args.images_root, model)
