@@ -18,6 +18,7 @@ def show_image_segmentation(model, image: torch.Tensor):
     f, axes = plt.subplots(2)
     axes[0].imshow(np_img)
     axes[1].imshow(mask)
+    plt.show()
 
 
 def show_random_image(root: str, model, device):
