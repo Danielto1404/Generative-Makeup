@@ -12,7 +12,7 @@ def show_image_segmentation(model, image: torch.Tensor):
     np_img = image.cpu().numpy().transpose((1, 2, 0))
 
     with torch.no_grad():
-        mask = model(image.unsqueeze(0))['out'][0].argmax(0)
+        mask = model(image.unsqueeze(0))['out'][0].argmax(0).cpu().numpy()
 
     plt.figure(figsize=(10, 20))
     f, axes = plt.subplots(2)
