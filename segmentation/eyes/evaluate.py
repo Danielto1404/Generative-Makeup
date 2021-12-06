@@ -42,7 +42,7 @@ if __name__ == "__main__":
     parser.add_argument('--annotation_path', help='path to the json COCO validation annotations file')
     parser.add_argument('--images_root', help='path to images folder')
     parser.add_argument('--load_path', help='model checkpoint path')
-    parser.add_argument('--batch_size', help='batch size')
+    parser.add_argument('--batch_size', type=int, help='batch size')
     parser.add_argument('--device', help='torch device')
     args = parser.parse_args()
     evaluate_from_args(
