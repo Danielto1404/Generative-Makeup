@@ -9,7 +9,7 @@ from dataset import CocoSegmentationDataset
 
 def evaluate(model, loader: DataLoader):
     val_loss = 0
-    for (i, (images, masks)) in tqdm(loader):
+    for images, masks in tqdm(loader):
         with torch.no_grad():
             outputs = model(images, masks)
             val_loss += outputs['loss'].item()
