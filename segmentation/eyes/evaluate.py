@@ -2,21 +2,22 @@ import argparse
 
 import torch
 from torch.utils.data import DataLoader
+from tqdm import tqdm
 
 from dataset import CocoSegmentationDataset
 
 
-def eval(model, loader: DataLoader):
-    print('in eval')
-    # pass
-    # pass
-    # pass
-    # pass
-    # pass
-    # print("x")
+def evaluate(model, loader: DataLoader):
+    val_loss = 0
+    for (i, (images, masks)) in tqdm(loader):
+        with torch.no_grad():
+            outputs = model(images, masks)
+            val_loss += outputs['loss'].item()
+
+    print(f'Validation loss: {val_loss}')
 
 
-def eval_from_args(
+def evaluate_from_args(
         annotation_path: str,
         images_root: str,
         load_path: str,
@@ -32,19 +33,9 @@ def eval_from_args(
         batch_size=batch_size,
         shuffle=False
     )
-    print(load_path)
-    # with open(load_path, 'r') as raw_model:
     model = torch.load(load_path, map_location=device)
-    eval(model, loader)
+    evaluate(model, loader)
 
-
-eval_from_args(
-    annotation_path='../../data/annotations-10.json',
-    images_root='../../data/images',
-    load_path='checkpoints/model.pth',
-    device='cpu',
-    batch_size=4,
-)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -54,7 +45,7 @@ if __name__ == "__main__":
     parser.add_argument('--batch_size', help='batch size')
     parser.add_argument('--device', help='torch device')
     args = parser.parse_args()
-    eval_from_args(
+    evaluate_from_args(
         annotation_path=args.annotation_path,
         images_root=args.images_root,
         load_path=args.load_path,
