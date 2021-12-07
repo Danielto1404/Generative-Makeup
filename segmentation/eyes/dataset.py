@@ -76,7 +76,8 @@ class CocoSegmentationDataset(torch.utils.data.Dataset):
         mask = self.build_mask((w, h), annotations)
         image = self.read_image(image_json['file_name'])
         image, mask = self.augmentation(image, mask)
-        return image.to(self.device).float(), mask.to(self.device).long()
+        return torch.tensor(image, device=self.device, dtype=torch.float), \
+               torch.tensor(mask, device=self.device, dtype=torch.long)
 
     def get_numpy(self, index) -> Tuple[np.ndarray, np.ndarray]:
         image, mask_ = self[index]
