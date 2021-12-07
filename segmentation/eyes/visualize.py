@@ -17,11 +17,11 @@ def show_image_segmentation(model, image: torch.Tensor):
         image = torch_normalize_image(image)
         mask = model(image.unsqueeze(0))['out'][0].argmax(0).cpu().numpy()
 
-    plt.figure(figsize=(10, 20))
-    f, axes = plt.subplots(2)
+    plt.figure(figsize=(15, 30))
+    f, axes = plt.subplots(1, 2)
     axes[0].imshow(np_img)
     axes[1].imshow(mask)
-    plt.show()
+    plt.savefig('visualization/viz.png')
 
 
 def show_random_image(root: str, model, device):
