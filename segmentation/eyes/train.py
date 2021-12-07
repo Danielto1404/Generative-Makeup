@@ -68,7 +68,7 @@ def train_from_args(
         verbose=True
     )
 
-    torch.save(model, model_path)
+    torch.save(model.state_dict(), model_path)
     print(f"Model saved to {model_path} successfully!")
 
 
