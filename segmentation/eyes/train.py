@@ -8,11 +8,12 @@ from dataset import CocoSegmentationDataset
 from model import SegmentationModel
 
 
-def train(model, train_loader, optimizer, epochs, val_loader=None, verbose=True):
+def train(model, train_loader, optimizer, epochs, val_loader=None, verbose=False):
     progress = trange(epochs, desc="Epochs") if verbose else range(epochs)
-    for _ in progress:
+    for i in progress:
         print('\n')
         print('~' * 80)
+        print(f'---> epoch: {i + 1} / {len(progress)}')
         model.train()
         train_loss = 0
         for batch_index, (images, masks) in enumerate(train_loader):
@@ -26,7 +27,7 @@ def train(model, train_loader, optimizer, epochs, val_loader=None, verbose=True)
             if verbose:
                 progress.set_postfix_str(f'batch: {batch_index + 1} / {len(train_loader)} | loss: {error}')
 
-        print()
+        print('\n')
         print(f'Train loss {train_loss / len(train_loader)}')
         if val_loader is None:
             continue
