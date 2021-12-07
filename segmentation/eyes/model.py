@@ -1,3 +1,4 @@
+import torch
 import torch.nn as nn
 from torchvision.models.segmentation import deeplabv3_resnet50, deeplabv3_resnet101
 
@@ -20,13 +21,13 @@ class SegmentationModel(nn.Module):
 
         # Cached in Users/a19378208/.cache/torch/hub/checkpoints/resnet50-0676ba61.pth
         self.model = constructor(num_classes=num_classes)
+        self.criterion = nn.CrossEntropyLoss(weight=torch.tensor([0.1, 0.45, 0.45]))
 
     def forward(self, image, mask=None) -> dict:
         image = torch_normalize_image(image)
         outputs = self.model(image)
         if mask is not None:
-            criterion = nn.CrossEntropyLoss()
             tensors = outputs['out']
-            outputs['loss'] = criterion(tensors, mask)
+            outputs['loss'] = self.criterion(tensors, mask)
 
         return outputs
