@@ -1,7 +1,6 @@
 import torch.nn as nn
 from torchvision.models.segmentation import fcn_resnet50, deeplabv3_resnet50, deeplabv3_resnet101
 
-from losses import FocalLoss
 from utils import torch_normalize_image
 
 arh_models = {
@@ -12,7 +11,7 @@ arh_models = {
 
 
 class SegmentationModel(nn.Module):
-    def __init__(self, num_classes: int, model_name: str = 'fcn_resnet50'):
+    def __init__(self, num_classes: int, model_name: str):
         super().__init__()
         self.num_classes = num_classes
         constructor = arh_models.get(model_name)
