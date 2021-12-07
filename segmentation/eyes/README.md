@@ -61,3 +61,6 @@
 ]
 ```
 
+### Как устроена тренировка?
+
+![landmarks](assets/landmarks.png) 

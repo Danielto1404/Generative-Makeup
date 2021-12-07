@@ -15,6 +15,7 @@ class SegmentationModel(nn.Module):
         constructor = arh_models.get(model_name)
         if constructor is None:
             raise NotImplemented(f'Model {model_name} not found, all models: {arh_models.keys()}')
+
         # Cached in Users/a19378208/.cache/torch/hub/checkpoints/resnet50-0676ba61.pth
         self.model = constructor(num_classes=num_classes)
 
