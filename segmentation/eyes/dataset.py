@@ -36,8 +36,8 @@ class CocoSegmentationDataset(torch.utils.data.Dataset):
     @property
     def _aug_transform(self):
         return A.Compose([
-            A.HorizontalFlip(p=0.5),
-            A.Rotate(15, p=0.5)
+            A.HorizontalFlip(p=0.4),
+            A.Rotate(30, p=0.5),
         ])
 
     def _get_image_json(self, index):

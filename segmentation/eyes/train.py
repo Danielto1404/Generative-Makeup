@@ -9,6 +9,7 @@ from model import SegmentationModel
 
 
 def train(model, train_loader, optimizer, epochs, val_loader=None, verbose=False):
+    scheduler = torch.optim.lr_scheduler.StepLR(optimizer, 1, gamma=0.9)
     progress = trange(epochs, desc="Epochs") if verbose else range(epochs)
     for i in progress:
         print('~' * 80)
@@ -40,7 +41,10 @@ def train(model, train_loader, optimizer, epochs, val_loader=None, verbose=False
 
         print()
         print(f'Validation loss: {val_loss / len(val_loader)}')
-        print('\n')
+        print()
+        print(f'Learning rate: {scheduler.get_lr()}')
+
+        scheduler.step()
 
 
 def train_from_args(
