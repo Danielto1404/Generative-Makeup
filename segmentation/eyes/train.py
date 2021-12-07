@@ -56,7 +56,8 @@ def train_from_args(
         num_epochs: int,
         lr: float,
         weight_decay: float,
-        device: str = 'cpu'
+        device: str = 'cpu',
+        verbose: bool = False
 ):
     model = SegmentationModel(num_classes=num_classes, model_name=model_name).to(device)
     train_dataset, val_dataset = CocoSegmentationDataset(
@@ -74,7 +75,7 @@ def train_from_args(
         val_loader=val_loader,
         optimizer=optimizer,
         epochs=num_epochs,
-        verbose=True
+        verbose=verbose
     )
 
     torch.save(model.state_dict(), model_path)
@@ -94,6 +95,7 @@ if __name__ == "__main__":
     parser.add_argument('--lr', type=float, help='learning rate in Adam optimizer')
     parser.add_argument('--l2', type=float, help='weight_decay in Adam optimizer')
     parser.add_argument('--device', help='torch device to use')
+    parser.add_argument('--verbose', type=bool, default=False, help='if true than shows the progress')
 
     args = parser.parse_args()
 
