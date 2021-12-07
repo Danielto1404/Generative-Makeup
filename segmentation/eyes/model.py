@@ -26,7 +26,7 @@ class SegmentationModel(nn.Module):
         image = torch_normalize_image(image)
         outputs = self.model(image)
         if mask is not None:
-            criterion = nn.CrossEntropyLoss(weight=torch.tensor([0.1, 0.45, 0.45]))
+            criterion = nn.CrossEntropyLoss(weight=torch.tensor([0.1, 0.45, 0.45]).cuda())
             tensors = outputs['out']
             outputs['loss'] = criterion(tensors, mask)
 
