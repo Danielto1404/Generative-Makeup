@@ -45,18 +45,17 @@ class CocoSegmentationDataset(torch.utils.data.Dataset):
         [image_json] = self.coco.loadImgs(image_index)
         return image_json
 
-    def build_mask(self, image_shape: (int, int), annotations: list) -> torch.Tensor:
+    def build_mask(self, image_shape: (int, int), annotations: list) -> numpy.ndarray:
         mask = np.zeros(image_shape)
         for annotation in annotations:
             class_mask = self.coco.annToMask(annotation)
             class_mask[class_mask != 0] = annotation['category_id']
             mask += class_mask
-        return torch.tensor(mask).long()
+        return mask
 
-    def read_image(self, file_path) -> torch.Tensor:
+    def read_image(self, file_path) -> numpy.ndarray:
         image = Image.open(os.path.join(self.root, file_path))
         image = numpy.asarray(image).transpose((2, 0, 1))
-        image = torch.tensor(image).float()
         return image
 
     def augmentation(self, image, mask) -> Tuple[torch.Tensor, torch.Tensor]:
@@ -77,7 +76,7 @@ class CocoSegmentationDataset(torch.utils.data.Dataset):
         mask = self.build_mask((w, h), annotations)
         image = self.read_image(image_json['file_name'])
         image, mask = self.augmentation(image, mask)
-        return image.to(self.device), mask.to(self.device)
+        return image.to(self.device).float(), mask.to(self.device).long()
 
     def get_numpy(self, index) -> Tuple[np.ndarray, np.ndarray]:
         image, mask_ = self[index]
