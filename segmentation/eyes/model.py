@@ -1,6 +1,7 @@
 import torch.nn as nn
 from torchvision.models.segmentation import fcn_resnet50, deeplabv3_resnet50, deeplabv3_resnet101
 
+from losses import FocalLoss
 from utils import torch_normalize_image
 
 arh_models = {
@@ -26,7 +27,7 @@ class SegmentationModel(nn.Module):
         outputs = self.model(image)
         if mask is not None:
             # criterion = nn.CrossEntropyLoss(weight=torch.tensor([0.1, 0.45, 0.45]).cuda())
-            criterion = nn.CrossEntropyLoss()
+            criterion = FocalLoss()
             tensors = outputs['out']
             outputs['loss'] = criterion(tensors, mask)
 
