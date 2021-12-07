@@ -24,7 +24,8 @@ def train(model, train_loader, optimizer, epochs, val_loader=None, verbose=True)
             if verbose:
                 progress.set_postfix_str(f'batch: {batch_index + 1} / {len(train_loader)} | loss: {error}')
 
-        print()
+        print('\n')
+        print('~' * 80)
         print(f'Train loss {train_loss / len(train_loader)}')
         if val_loader is None:
             continue
@@ -36,8 +37,10 @@ def train(model, train_loader, optimizer, epochs, val_loader=None, verbose=True)
                 outputs = model(images, masks)
                 val_loss += outputs['loss'].item()
 
+        print()
         print(f'Validation loss: {val_loss} / {len(val_loader)}')
         print('~' * 80)
+        print('\n\n')
 
 
 def train_from_args(
@@ -45,6 +48,7 @@ def train_from_args(
         images_root: str,
         model_path: str,
         model_name: str,
+        val_size: float,
         num_classes: int,
         batch_size: int,
         num_epochs: int,
@@ -53,17 +57,19 @@ def train_from_args(
         device: str = 'cpu'
 ):
     model = SegmentationModel(num_classes=num_classes, model_name=model_name).to(device)
-    dataset = CocoSegmentationDataset(
+    train_dataset, val_dataset = CocoSegmentationDataset(
         annotation_path=annotation_path,
         images_root=images_root,
         device=device,
-    )
-    train_loader = DataLoader(dataset, shuffle=True, batch_size=batch_size)
+    ).train_val_split(val_size=val_size)
+    train_loader = DataLoader(train_dataset, shuffle=True, batch_size=batch_size)
+    val_loader = DataLoader(val_dataset, batch_size=batch_size)
     optimizer = torch.optim.Adam(model.parameters(), lr=lr, weight_decay=weight_decay)
 
     train(
         model=model,
         train_loader=train_loader,
+        val_loader=val_loader,
         optimizer=optimizer,
         epochs=num_epochs,
         verbose=True
@@ -79,6 +85,7 @@ if __name__ == "__main__":
     parser.add_argument('--images_root', help='path to images folder')
     parser.add_argument('--model_path', help='path to which the model will be saved')
     parser.add_argument('--model_name', help='model to train')
+    parser.add_argument('--val_size', type=float, default=0.0, help='validation data %')
     parser.add_argument('--num_classes', type=int, help='num classes for segmentation')
     parser.add_argument('--num_epochs', type=int, help='amount of training epochs')
     parser.add_argument('--batch_size', type=int, help='batch size in train loader')
@@ -93,6 +100,7 @@ if __name__ == "__main__":
         images_root=args.images_root,
         model_path=args.model_path,
         model_name=args.model_name,
+        val_size=args.val_size,
         num_classes=args.num_classes,
         batch_size=args.batch_size,
         num_epochs=args.num_epochs,

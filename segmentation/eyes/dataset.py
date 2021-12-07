@@ -85,5 +85,9 @@ class CocoSegmentationDataset(torch.utils.data.Dataset):
         mask_ = mask_.cpu().numpy()
         return image, mask_
 
+    def train_val_split(self, val_size=0.0):
+        train_size = int(len(self) * (1 - val_size))
+        return torch.utils.data.random_split(self, lengths=[train_size, len(self) - train_size])
+
     def __len__(self):
         return len(self._ids)
