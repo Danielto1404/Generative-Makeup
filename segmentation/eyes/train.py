@@ -11,7 +11,6 @@ from model import SegmentationModel
 def train(model, train_loader, optimizer, epochs, val_loader=None, verbose=False):
     progress = trange(epochs, desc="Epochs") if verbose else range(epochs)
     for i in progress:
-        print('\n')
         print('~' * 80)
         print(f'---> epoch: {i + 1} / {len(progress)}')
         model.train()
@@ -27,7 +26,7 @@ def train(model, train_loader, optimizer, epochs, val_loader=None, verbose=False
             if verbose:
                 progress.set_postfix_str(f'batch: {batch_index + 1} / {len(train_loader)} | loss: {error}')
 
-        print('\n')
+        print()
         print(f'Train loss {train_loss / len(train_loader)}')
         if val_loader is None:
             continue
@@ -41,7 +40,6 @@ def train(model, train_loader, optimizer, epochs, val_loader=None, verbose=False
 
         print()
         print(f'Validation loss: {val_loss / len(val_loader)}')
-        print('~' * 80)
         print('\n')
 
 
