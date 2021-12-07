@@ -44,6 +44,7 @@ def train_from_args(
         annotation_path: str,
         images_root: str,
         model_path: str,
+        model_name: str,
         num_classes: int,
         batch_size: int,
         num_epochs: int,
@@ -51,7 +52,7 @@ def train_from_args(
         weight_decay: float,
         device: str = 'cpu'
 ):
-    model = SegmentationModel(num_classes=num_classes).to(device)
+    model = SegmentationModel(num_classes=num_classes, model_name=model_name).to(device)
     dataset = CocoSegmentationDataset(
         annotation_path=annotation_path,
         images_root=images_root,
@@ -77,6 +78,7 @@ if __name__ == "__main__":
     parser.add_argument('--annotation_path', help='path to the json COCO annotations file')
     parser.add_argument('--images_root', help='path to images folder')
     parser.add_argument('--model_path', help='path to which the model will be saved')
+    parser.add_argument('--model_name', help='model to train')
     parser.add_argument('--num_classes', type=int, help='num classes for segmentation')
     parser.add_argument('--num_epochs', type=int, help='amount of training epochs')
     parser.add_argument('--batch_size', type=int, help='batch size in train loader')
@@ -90,6 +92,7 @@ if __name__ == "__main__":
         annotation_path=args.annotation_path,
         images_root=args.images_root,
         model_path=args.model_path,
+        model_name=args.model_name,
         num_classes=args.num_classes,
         batch_size=args.batch_size,
         num_epochs=args.num_epochs,
