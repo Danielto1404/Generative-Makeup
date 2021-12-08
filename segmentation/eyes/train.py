@@ -8,7 +8,7 @@ from dataset import CocoSegmentationDataset
 from model import SegmentationModel
 
 
-def train(model, train_loader, optimizer, epochs, val_loader=None, verbose=False):
+def train(model, train_loader, optimizer, epochs=5, val_loader=None, device='cpu', verbose=False):
     scheduler = torch.optim.lr_scheduler.StepLR(optimizer, 1, gamma=0.9)
     progress = trange(epochs, desc="Epochs") if verbose else range(epochs)
     for i in progress:
@@ -17,6 +17,7 @@ def train(model, train_loader, optimizer, epochs, val_loader=None, verbose=False
         model.train()
         train_loss = 0
         for batch_index, (images, masks) in enumerate(train_loader):
+            images, masks = images.to(device), masks.to(device)
             optimizer.zero_grad()
             outputs = model(images, masks)
             loss = outputs['loss']
@@ -62,7 +63,6 @@ def train_from_args(
     train_dataset, val_dataset = CocoSegmentationDataset(
         annotation_path=annotation_path,
         images_root=images_root,
-        device=device,
     ).train_val_split(val_size=val_size)
     train_loader = DataLoader(train_dataset, shuffle=True, batch_size=batch_size)
     val_loader = DataLoader(val_dataset, batch_size=batch_size)
@@ -74,6 +74,7 @@ def train_from_args(
         val_loader=val_loader,
         optimizer=optimizer,
         epochs=num_epochs,
+        device=device,
         verbose=verbose
     )
 

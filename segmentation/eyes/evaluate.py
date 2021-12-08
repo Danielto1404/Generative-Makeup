@@ -27,7 +27,6 @@ def evaluate_from_args(
     dataset = CocoSegmentationDataset(
         annotation_path=annotation_path,
         images_root=images_root,
-        device=device
     )
     loader = DataLoader(
         dataset=dataset,
