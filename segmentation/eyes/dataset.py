@@ -119,6 +119,15 @@ class CocoSegmentationSubset(torch.utils.data.Subset):
 
     def __getitem__(self, index) -> Tuple[torch.Tensor, torch.Tensor]:
         image, mask = self.dataset[self.indices[index]]
+        # print(mask.shape)
         transformed = self.transform(image=image, mask=mask)
+        # print(transformed['mask'].shape, type(transformed['mask'])),
         image, mask = transformed['image'], transformed['mask']
-        return self.to_tensor(image).float(), self.to_tensor(mask).long()
+        return self.normalize(image).float(), torch.tensor(mask).long()
+
+#
+# dataset = CocoSegmentationDataset('../../data/ann2.json', '../../data/images/')
+#
+# t, v = dataset.train_val_split(0.3)
+#
+# print(t[0][1].shape)
