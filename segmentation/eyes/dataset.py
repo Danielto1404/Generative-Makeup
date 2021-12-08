@@ -47,7 +47,6 @@ class CocoSegmentationDataset(torch.utils.data.Dataset):
         for annotation in annotations:
             class_mask = self.coco.annToMask(annotation)
             class_mask[class_mask != 0] = annotation['category_id']
-            # class_mask[class_mask != 0] = 1
             mask += class_mask
         return mask
 
@@ -115,6 +114,6 @@ class CocoSegmentationSubset(torch.utils.data.Subset):
 
     def __getitem__(self, index) -> Tuple[torch.Tensor, torch.Tensor]:
         image, mask = self.dataset[self.indices[index]]
-        transformed = self.transform(image=image, mask=mask)
-        image, mask = transformed['image'], transformed['mask']
+        # transformed = self.transform(image=image, mask=mask)
+        # image, mask = transformed['image'], transformed['mask']
         return self.normalize(image).float(), torch.tensor(mask).long()
