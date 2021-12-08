@@ -46,8 +46,8 @@ class CocoSegmentationDataset(torch.utils.data.Dataset):
         mask = np.zeros(image_shape)
         for annotation in annotations:
             class_mask = self.coco.annToMask(annotation)
-            # class_mask[class_mask != 0] = annotation['category_id']
-            class_mask[class_mask != 0] = 1
+            class_mask[class_mask != 0] = annotation['category_id']
+            # class_mask[class_mask != 0] = 1
             mask += class_mask
         return mask
 
@@ -106,11 +106,7 @@ class CocoSegmentationSubset(torch.utils.data.Subset):
     def transform(self):
         if self.mode == 'train':
             return A.Compose([
-                A.ShiftScaleRotate(
-                    shift_limit=0.01,
-                    scale_limit=0,
-                    rotate_limit=20,
-                    p=0.5)
+                A.NoOp()
             ])
         elif self.mode == 'val':
             return A.NoOp()
@@ -119,15 +115,6 @@ class CocoSegmentationSubset(torch.utils.data.Subset):
 
     def __getitem__(self, index) -> Tuple[torch.Tensor, torch.Tensor]:
         image, mask = self.dataset[self.indices[index]]
-        # print(mask.shape)
         transformed = self.transform(image=image, mask=mask)
-        # print(transformed['mask'].shape, type(transformed['mask'])),
         image, mask = transformed['image'], transformed['mask']
         return self.normalize(image).float(), torch.tensor(mask).long()
-
-#
-# dataset = CocoSegmentationDataset('../../data/ann2.json', '../../data/images/')
-#
-# t, v = dataset.train_val_split(0.3)
-#
-# print(t[0][1].shape)
