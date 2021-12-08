@@ -17,7 +17,7 @@ def train(model, train_loader, optimizer, epochs=5, val_loader=None, device='cpu
         model.train()
         train_loss = 0
         for batch_index, (images, masks) in enumerate(train_loader):
-            images, masks = images.to(device), masks.to(device)
+            images, masks = images.to(device).float(), masks.to(device).long()
             optimizer.zero_grad()
             outputs = model(images, masks)
             loss = outputs['loss']
