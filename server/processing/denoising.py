@@ -2,12 +2,10 @@ import enum
 from typing import Tuple, List
 
 import cv2
-import dlib
-import matplotlib.pyplot as plt
 from imutils import face_utils
 from imutils.face_utils import FACIAL_LANDMARKS_68_IDXS
 
-from server.common import Point, BGR2RGB
+from server.common import Point, sized_box
 
 
 class FaceSide(enum.Enum):
@@ -22,13 +20,15 @@ def get_makeup_eye_box(
         x_padding: Tuple[int, int] = (0, 0),
         y_padding: Tuple[int, int] = (0, 0)
 ) -> Tuple[Point, Point]:
+    
     eyebrow_min_index, eyebrow_max_index = FACIAL_LANDMARKS_68_IDXS[f'{side.value}_eyebrow']
     eye_min_index, eye_max_index = FACIAL_LANDMARKS_68_IDXS[f'{side.value}_eye']
 
     padding_left, padding_right = x_padding
     padding_top, padding_bottom = y_padding
 
-    left, top, right, bottom = size, size, 0, 0
+    left, top, right, bottom = sized_box(size)
+
     for i, (x, y) in enumerate(landmarks):
         if i in range(eyebrow_min_index, eyebrow_max_index):
             top = max(
@@ -89,11 +89,13 @@ def detect_eyes(
 
 
 def _denoise_one_eye(
-        image,
+        source,
+        target,
         eye_box: Tuple[Point, Point]
 ):
     (left, top), (right, bottom) = eye_box
-    eye_fragment = image[top:bottom, left:right]
+    eye_fragment = source[top:bottom, left:right]
+
     retouched_eye = cv2.fastNlMeansDenoisingColored(
         src=eye_fragment,
         dst=None,
@@ -102,11 +104,27 @@ def _denoise_one_eye(
         templateWindowSize=7,
         searchWindowSize=5
     )
-    image[top:bottom, left:right] = retouched_eye
-    return image
+
+    target[top:bottom, left:right] = retouched_eye
+    return target
 
 
-def denoise_eyes(
+def _denoise_face(
+        image,
+):
+    retouched_image = cv2.fastNlMeansDenoisingColored(
+        src=image,
+        dst=None,
+        h=6,
+        hColor=10,
+        templateWindowSize=7,
+        searchWindowSize=5
+    )
+
+    return retouched_image
+
+
+def denoise_face(
         image,
         detector,
         predictor,
@@ -120,19 +138,11 @@ def denoise_eyes(
         predictor=predictor,
         size=size,
         x_padding=x_padding,
-        y_padding=y_padding)
+        y_padding=y_padding
+    )
 
-    image = _denoise_one_eye(image, left_eye_box)
-    image = _denoise_one_eye(image, right_eye_box)
+    retouched_image = _denoise_face(image)
+    retouched_image = _denoise_one_eye(source=image, target=retouched_image, eye_box=left_eye_box)
+    retouched_image = _denoise_one_eye(source=image, target=retouched_image, eye_box=right_eye_box)
 
-    return image
-
-
-if __name__ == '__main__':
-    img = cv2.imread('../../../../Downloads/generated/seed0241.png')
-    plt.imsave("before.png", BGR2RGB(img))
-    detector = dlib.get_frontal_face_detector()
-    predictor = dlib.shape_predictor('../static/models/shape_predictor_68_face_landmarks.dat')
-    img = denoise_eyes(image=img, detector=detector, predictor=predictor)
-    img = BGR2RGB(img)
-    plt.imsave('after.png', img)
+    return retouched_image
