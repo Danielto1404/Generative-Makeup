@@ -5,7 +5,7 @@ import cv2
 from imutils import face_utils
 from imutils.face_utils import FACIAL_LANDMARKS_68_IDXS
 
-from server.common import Point, sized_box
+from server.utils import Point, sized_box
 
 
 class FaceSide(enum.Enum):
@@ -20,7 +20,7 @@ def get_makeup_eye_box(
         x_padding: Tuple[int, int] = (0, 0),
         y_padding: Tuple[int, int] = (0, 0)
 ) -> Tuple[Point, Point]:
-    
+
     eyebrow_min_index, eyebrow_max_index = FACIAL_LANDMARKS_68_IDXS[f'{side.value}_eyebrow']
     eye_min_index, eye_max_index = FACIAL_LANDMARKS_68_IDXS[f'{side.value}_eye']
 
