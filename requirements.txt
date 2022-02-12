@@ -1,7 +1,5 @@
-numpy
+numpy==1.22.2
 scikit-learn
 opencv-python
-tqdm
-jupyter
-pillow
-matplotlib
+dlib
+imutils
