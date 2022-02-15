@@ -5,7 +5,7 @@ import cv2
 from imutils import face_utils
 from imutils.face_utils import FACIAL_LANDMARKS_68_IDXS
 
-from server.utils import Point, sized_box
+from processing.utils import Point, sized_box
 
 
 class FaceSide(enum.Enum):
