@@ -8,7 +8,7 @@
 
 Dataset contains frontal center cropped makeup face image. Dataset was gather from Instagram accounts, Pinterest and Unsplash.
 
-Download [link](https://drive.google.com/file/d/16ZHYanFx-M3VPQ8LYIViyGG_-YoJyl4v/view?usp=sharing).
+***Download [link](https://drive.google.com/file/d/16ZHYanFx-M3VPQ8LYIViyGG_-YoJyl4v/view?usp=sharing).***
 
 **Instagram references:**
 + alexeeva_victoria
