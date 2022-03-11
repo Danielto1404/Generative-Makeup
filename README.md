@@ -2,9 +2,15 @@
 
 ### Dataset:
 
+Dataset contains ~ 1500 makeup images with frontal aligned faces.
+
+| Quantity      | Resolution  | Test Text     |
+| :---          |    :----:   |          ---: |
+| 1429          | 512 x 512   | Here's this   |
+
 [google drive](link)
 
-Instagram referes:
+Instagram references:
 + alexeeva_victoria
 + anastasia_obv
 + beautyunionpl
