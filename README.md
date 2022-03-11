@@ -8,9 +8,9 @@
 
 Dataset contains ***frontal center cropped makeup*** face image. Download from [here](https://drive.google.com/file/d/16ZHYanFx-M3VPQ8LYIViyGG_-YoJyl4v/view?usp=sharing)
 
-Dataset was gather from [Instagram](https://www.instagram.com/) accounts, [Pinterest](https://www.pinterest.com/) and [Unsplash](https://unsplash.com/).
+Dataset was gather from Instagram accounts, Pinterest and Unsplash.
 
-Instagram references:
+**Instagram references:**
 + alexeeva_victoria
 + anastasia_obv
 + beautyunionpl
