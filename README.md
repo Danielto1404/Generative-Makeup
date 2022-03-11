@@ -1,14 +1,16 @@
-### Generative makeup trasnfer
+## Generative makeup trasnfer
 
-### Dataset:
+#### Dataset:
 
-Dataset contains ~ 1500 makeup images with frontal aligned faces.
+Dataset was gather from [Instagram](https://www.instagram.com/) accounts, [Pinterest](https://www.pinterest.com/) and [Unsplash](https://unsplash.com/).
+
+Dataset contains *frontal center cropped makeup* face image.
 
 | Quantity | Resolution | Face cropped  |
 | :----    |    :----:  |      ----:    |
 | 1429     | 512 x 512  |      ✅       |
 
-[google drive](link)
+Download from [here](https://drive.google.com/file/d/16ZHYanFx-M3VPQ8LYIViyGG_-YoJyl4v/view?usp=sharing)
 
 Instagram references:
 + alexeeva_victoria
