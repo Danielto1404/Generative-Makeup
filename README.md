@@ -4,9 +4,9 @@
 
 Dataset contains ~ 1500 makeup images with frontal aligned faces.
 
-| Quantity      | Resolution  | Test Text     |
-| :---          |    :----:   |          ---: |
-| 1429          | 512 x 512   | Here's this   |
+| Quantity      | Resolution  | Face cropped  |
+| :---          |    :----:   |      ---:     |
+| 1429          | 512 x 512   |      ✅       |
 
 [google drive](link)
 
