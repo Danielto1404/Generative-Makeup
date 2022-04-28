@@ -3,3 +3,5 @@ scikit-learn
 opencv-python
 dlib
 imutils
+requests
+torch
